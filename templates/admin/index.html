@@ -1,0 +1,529 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+{% load static %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+    :root {
+        --primary-color: #264b5d;
+        --primary-light: #335f75;
+        --primary-dark: #1a3744;
+        --secondary-color: #f5f7f9;
+        --text-color: #2c3e50;
+        --border-color: #e2e8f0;
+        --white: #ffffff;
+        --success: #2ecc71;
+        --warning: #f1c40f;
+    }
+
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background-color: var(--secondary-color);
+        color: var(--text-color);
+        line-height: 1.6;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Header Styles */
+    .header {
+        background: var(--primary-color);
+        padding: 1rem 2rem;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .header-content {
+        max-width: 1400px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .header-title {
+        color: var(--white);
+        font-size: 1.25rem;
+        font-weight: 500;
+    }
+
+    .header-controls {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+    }
+
+    .user-info {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        color: var(--white);
+    }
+
+    .timestamp {
+        color: rgba(255,255,255,0.9);
+        font-size: 0.875rem;
+    }
+
+    /* Container */
+    .container {
+        max-width: 1400px;
+        margin: 2rem auto;
+        padding: 0 2rem;
+    }
+
+    /* Action Buttons */
+    .action-buttons {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 1rem;
+        margin-bottom: 2rem;
+        overflow-x: auto;
+    }
+
+    .action-button {
+        background: var(--white);
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        padding: 1rem;
+        text-decoration: none;
+        color: var(--text-color);
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        min-width: 200px;
+    }
+
+    .action-button:hover {
+        border-color: var(--primary-color);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    }
+
+    .action-icon {
+        background: var(--primary-color);
+        color: var(--white);
+        width: 40px;
+        height: 40px;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .action-text {
+        font-weight: 500;
+        font-size: 0.9rem;
+    }
+
+    /* Module Styles */
+    .module {
+        background: var(--white);
+        border-radius: 6px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        margin-bottom: 2rem;
+        overflow: hidden;
+    }
+
+    .module h2 {
+        background: var(--primary-color);
+        color: var(--white);
+        padding: 1rem 1.5rem;
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 500;
+    }
+
+    .module table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .module th,
+    .module td {
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .module tr:last-child td {
+        border-bottom: none;
+    }
+
+    .model-name {
+        width: 70%;
+    }
+
+    .actions {
+        width: 30%;
+        text-align: right;
+        white-space: nowrap;
+    }
+
+    .actions .btn {
+        margin-left: 0.5rem;
+    }
+
+    /* Buttons */
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.2s;
+    }
+
+    .btn-primary {
+        background: var(--primary-color);
+        color: var(--white);
+        border: none;
+    }
+
+    .btn-primary:hover {
+        background: var(--primary-light);
+    }
+
+    .btn-logout {
+        background: transparent;
+        color: var(--white);
+        border: 1px solid rgba(255,255,255,0.3);
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.875rem;
+        transition: all 0.2s;
+    }
+
+    .btn-logout:hover {
+        background: rgba(255,255,255,0.1);
+    }
+
+    /* Recent Actions */
+    .recent-actions {
+        background: var(--white);
+        border-radius: 6px;
+        padding: 1.5rem;
+    }
+
+    .actionlist {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .actionlist li {
+        padding: 0.75rem 0;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .actionlist li:last-child {
+        border-bottom: none;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1200px) {
+        .action-buttons {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .action-buttons {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .header-content {
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .header-controls {
+            flex-direction: column;
+            gap: 1rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .action-buttons {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<header class="header">
+    <div class="header-content">
+        <div class="header-title">
+            MSC Administration Portal
+        </div>
+        <div class="header-controls">
+            <div class="user-info">
+                {% load tz %}
+{% timezone "Asia/Kathmandu" %}
+    <span class="timestamp">{% now "Y-m-d H:i:s" %}</span>
+{% endtimezone %}
+                <span>|</span>
+                <span>{{ user.get_username }}</span>
+            </div>
+            <form method="post" action="{% url 'admin:logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> Sign Out
+                </button>
+            </form>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+        <a href="/college/assignsubjectteacher/" class="action-button">
+            <div class="action-icon">
+                <i class="fas fa-user-tie"></i>
+            </div>
+            <span class="action-text">Assign Subject Teachers</span>
+        </a>
+
+        <a href="cloneyear" class="action-button">
+            <div class="action-icon">
+                <i class="fas fa-clone"></i>
+            </div>
+            <span class="action-text">Clone Academic Year</span>
+        </a>
+
+        <a href="export" class="action-button">
+            <div class="action-icon">
+                <i class="fas fa-file-export"></i>
+            </div>
+            <span class="action-text">Export Data</span>
+        </a>
+
+        <a href="/admin/college/teacher/" class="action-button">
+            <div class="action-icon">
+                <i class="fas fa-chalkboard-teacher"></i>
+            </div>
+            <span class="action-text">Teacher Management</span>
+        </a>
+
+        <a href="/admin/college/expert/" class="action-button">
+            <div class="action-icon">
+                <i class="fas fa-star"></i>
+            </div>
+            <span class="action-text">Expert Management</span>
+        </a>
+    </div>
+
+    <!-- Main Content -->
+    <div id="content-main">
+        {% if app_list %}
+            {% for app in app_list %}
+                <div class="module">
+                    <h2>{{ app.name }}</h2>
+                    <table>
+                        {% for model in app.models %}
+                            <tr>
+                                <td class="model-name">
+                                    {% if model.admin_url %}
+                                        <a href="{{ model.admin_url }}">{{ model.name }}</a>
+                                    {% else %}
+                                        {{ model.name }}
+                                    {% endif %}
+                                </td>
+                                <td class="actions">
+                                    {% if model.add_url %}
+                                        <a href="{{ model.add_url }}" class="btn btn-primary">
+                                            <i class="fas fa-plus"></i> Add
+                                        </a>
+                                    {% endif %}
+                                    {% if model.admin_url %}
+                                        <a href="{{ model.admin_url }}" class="btn btn-primary">
+                                            <i class="fas fa-edit"></i> Manage
+                                        </a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="module">
+                <h2>Access Restricted</h2>
+                <p>You don't have permission to view or edit any content.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block sidebar %}
+<div class="container">
+    <div class="module" id="recent-actions-module">
+        <h2>Recent Activities</h2>
+        <div class="recent-actions">
+            {% load log %}
+            {% get_admin_log 10 as admin_log for_user user %}
+            {% if not admin_log %}
+                <p>No recent activities</p>
+            {% else %}
+                <ul class="actionlist">
+                    {% for entry in admin_log %}
+                        <li>
+                            {% if entry.is_deletion or not entry.get_admin_url %}
+                                {{ entry.object_repr }}
+                            {% else %}
+                                <a href="{{ entry.get_admin_url }}">{{ entry.object_repr }}</a>
+                            {% endif %}
+                            <br>
+                            <span class="mini quiet">
+                                {% if entry.content_type %}
+                                    {% filter capfirst %}{{ entry.content_type }}{% endfilter %}
+                                {% else %}
+                                    Unknown content
+                                {% endif %}
+                            </span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% comment %} {% extends "admin/base_site.html" %}
+{% load i18n static %}
+{% load static %}
+
+
+{% block extrastyle %}{{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}">{% endblock %}
+
+{% block coltype %}colMS{% endblock %}
+
+{% block bodyclass %}{{ block.super }} dashboard{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+
+    <div>
+        <h2> Actions </h2>
+        <a href="/college/assignsubjectteacher/">
+            Assign Subject Teachers
+        </a> &nbsp &nbsp &nbsp &nbsp
+
+        <a href="cloneyear">
+            Clone Data to New year
+        </a>  &nbsp &nbsp &nbsp &nbsp
+
+
+        <a href="export">
+            <img src="{% static 'admin/img/excellogo.png' %}">
+            Export Excel Table
+        </a> <br><br>
+
+       <a href="/admin/college/teacher/">
+            View Teacher List
+        </a>  &nbsp &nbsp &nbsp &nbsp
+
+       <a href="/admin/college/expert/">
+            View Expert List
+        </a>  &nbsp &nbsp &nbsp &nbsp
+<!-- 
+        <a href="/admin/dumpteachers/">
+            Dump Teachers
+        </a>  &nbsp &nbsp &nbsp &nbsp -->
+
+
+    </div> <br><br>
+
+    <div id="content-main">
+
+
+        {% if app_list %}
+            {% for app in app_list %}
+                <div class="app-{{ app.app_label }} module">
+                    <table>
+                        <caption>
+                            <a href="{{ app.app_url }}" class="section"
+                               title="{% blocktrans with name=app.name %}Models in the {{ name }} application{% endblocktrans %}">{{ app.name }}</a>
+                        </caption>
+
+
+                        {% for model in app.models %}
+                            <tr class="model-{{ model.object_name|lower }}">
+                                {% if model.admin_url %}
+                                    <th scope="row"><a href="{{ model.admin_url }}">{{ model.name }}</a></th>
+                                {% else %}
+                                    <th scope="row">{{ model.name }}</th>
+                                {% endif %}
+
+                                {% if model.add_url %}
+                                    <td><a href="{{ model.add_url }}" class="addlink">{% trans 'Add' %}</a></td>
+                                {% else %}
+                                    <td>&nbsp;</td>
+                                {% endif %}
+
+                                {% if model.admin_url %}
+                                    {% if model.view_only %}
+                                        <td><a href="{{ model.admin_url }}" class="viewlink">{% trans 'View' %}</a></td>
+                                    {% else %}
+                                        <td><a href="{{ model.admin_url }}" class="changelink">{% trans 'Change' %}</a>
+                                        </td>
+                                    {% endif %}
+                                {% else %}
+                                    <td>&nbsp;</td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            {% endfor %}
+
+        {% else %}
+            <p>{% trans "You don't have permission to view or edit anything." %}</p>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block sidebar %}
+    <div id="content-related">
+        <div class="module" id="recent-actions-module">
+            <h2>{% trans 'Recent actions' %}</h2>
+            <h3>{% trans 'My actions' %}</h3>
+            {% load log %}
+            {% get_admin_log 10 as admin_log for_user user %}
+            {% if not admin_log %}
+                <p>{% trans 'None available' %}</p>
+            {% else %}
+                <ul class="actionlist">
+                    {% for entry in admin_log %}
+                        <li class="{% if entry.is_addition %}addlink{% endif %}{% if entry.is_change %}changelink{% endif %}{% if entry.is_deletion %}deletelink{% endif %}">
+                            {% if entry.is_deletion or not entry.get_admin_url %}
+                                {{ entry.object_repr }}
+                            {% else %}
+                                <a href="{{ entry.get_admin_url }}">{{ entry.object_repr }}</a>
+                            {% endif %}
+                            <br>
+                            {% if entry.content_type %}
+                                <span class="mini quiet">{% filter capfirst %}
+                                    {{ entry.content_type }}{% endfilter %}</span>
+                            {% else %}
+                                <span class="mini quiet">{% trans 'Unknown content' %}</span>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %} {% endcomment %}

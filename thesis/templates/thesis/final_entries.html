@@ -1,0 +1,32 @@
+{% extends 'thesis/base.html' %}
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'thesis/proposal_entries.css' %}">
+{% endblock %}
+
+{% block body %}
+    <a href="{% url 'thesis:finalNotice' %}" class="push_button blue">
+        Create Final Thesis Defense Notice
+    </a>
+
+    <a href="{% url 'thesis:final_thesis_defense_list' %}" class="push_button blue">
+        Prepare Final Thesis Defense List
+    </a>
+
+    <a href="{% url 'thesis:results' %}" class="push_button blue">
+        Final Evaluation Letter
+    </a>
+
+    <h2>Downloaded Final Files</h2>
+    <ul>
+        {% for file in files %}
+            <li>
+                <a href="{% url 'thesis:serve_final_file' file %}">
+                    {{ file }}
+                </a>
+            </li>
+        {% empty %}
+            <li>No files found.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

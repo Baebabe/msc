@@ -1,0 +1,80 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{% static 'admin/css/dashboard.css' %}">
+{% endblock %}
+
+{% block coltype %}colMS{% endblock %}
+
+{% block bodyclass %}{{ block.super }} dashboard{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+<div id="content-main">
+    <h1>MSc Administrator Dashboard</h1>
+    
+    <div class="module">
+        <h2>Quick Statistics</h2>
+        <div class="dashboard-stats">
+            <div class="stat-box">
+                <h3>Coordinators</h3>
+                <p>{{ coordinators.count }}</p>
+            </div>
+            <div class="stat-box">
+                <h3>Total Teachers</h3>
+                <p>{{ total_teachers }}</p>
+            </div>
+            <div class="stat-box">
+                <h3>Total Programmes</h3>
+                <p>{{ total_programmes }}</p>
+            </div>
+            <div class="stat-box">
+                <h3>Subject Assignments</h3>
+                <p>{{ total_subjects }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="module">
+        <h2>Programme Coordinators</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Programme</th>
+                    <th>Contact</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for coordinator in coordinators %}
+                <tr>
+                    <td>{{ coordinator.full_name }}</td>
+                    <td>
+                        {% for programme in coordinator.programme_set.all %}
+                            {{ programme.name }}<br>
+                        {% endfor %}
+                    </td>
+                    <td>{{ coordinator.email }}<br>{{ coordinator.mobile_phone }}</td>
+                    <td>
+                        <a href="{% url 'admin:college_teacher_change' coordinator.id %}" class="button">Edit</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="module">
+        <h2>Quick Actions</h2>
+        <ul class="actionlist">
+            <li><a href="{% url 'college:export_form' %}" class="addlink">Export Data</a></li>
+            <li><a href="{% url 'college:clone_year' %}" class="changelink">Clone Academic Year</a></li>
+            <li><a href="{% url 'admin:college_teacher_add' %}" class="addlink">Add New Teacher</a></li>
+            <li><a href="{% url 'college:export_teachers' %}" class="viewlink">View All Teachers</a></li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

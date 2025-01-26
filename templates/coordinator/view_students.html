@@ -1,0 +1,55 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block bodyclass %}{{ block.super }} view-students{% endblock %}
+
+{% block content %}
+<div id="content-main">
+    <h1>{{ programme.name }} - Student Overview</h1>
+
+    <div class="module">
+        <h2>Batches</h2>
+        {% for batch in batches %}
+        <div class="batch-section">
+            <h3>Batch {{ batch.year.name }}</h3>
+            <div class="batch-info">
+                <p><strong>Number of Students:</strong> {{ batch.number_of_students }}</p>
+                <p><strong>Current Semester:</strong> 
+                    {% with batch.assignsubjectteacher_set.last as last_assignment %}
+                        {% if last_assignment %}
+                            {{ last_assignment.semester }}
+                        {% else %}
+                            Not assigned
+                        {% endif %}
+                    {% endwith %}
+                </p>
+            </div>
+            
+            <div class="semester-subjects">
+                {% regroup batch.assignsubjectteacher_set.all by semester as semester_subjects %}
+                {% for semester in semester_subjects %}
+                <div class="semester-block">
+                    <h4>{{ semester.grouper }} Semester</h4>
+                    <ul>
+                        {% for assignment in semester.list %}
+                        <li>{{ assignment.subject.name }} - {{ assignment.subject_teacher.full_name }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% empty %}
+        <p>No batches found for this programme.</p>
+        {% endfor %}
+    </div>
+
+    <div class="module">
+        <h2>Actions</h2>
+        <div class="actions">
+            <a href="{% url 'college:manage_programme_teachers' programme.id %}" class="button">Manage Teachers</a>
+            <a href="{% url 'college:coordinator_dashboard' %}" class="button">Back to Dashboard</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

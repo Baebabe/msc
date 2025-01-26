@@ -1,0 +1,24 @@
+{% extends 'thesis/base.html' %}
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'thesis/proposal_entries.css' %}">
+{% endblock %}
+
+{% block body %}
+    <a href="{% url 'thesis:proposalNotice' %}" class="push_button blue">
+        Create Proposal Defense Notice
+    </a>
+
+    <h2>Downloaded Proposal Files</h2>
+    <ul>
+        {% for file in files %}
+            <li>
+                <a href="{% url 'thesis:serve_proposal_file' file %}" download>
+                    {{ file }}
+                </a>
+            </li>
+        {% empty %}
+            <li>No files found.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

@@ -1,0 +1,211 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MSc Workflow</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #000419;
+            overflow: hidden;
+        }
+
+        .fullscreen-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .background-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+            filter: brightness(1.2) contrast(1.1) saturate(1.1);
+            transform: scale(1.1);
+            animation: subtleZoom 20s infinite alternate ease-in-out;
+        }
+
+        @keyframes subtleZoom {
+            from { transform: scale(1.1) translate(0, 0); }
+            to { transform: scale(1.15) translate(-1%, -1%); }
+        }
+
+        .gradient-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                rgba(0, 4, 25, 0) 0%,
+                rgba(0, 4, 25, 0.3) 40%,
+                rgba(0, 4, 25, 0.7) 60%,
+                rgba(0, 4, 25, 0.9) 80%,
+                rgba(0, 4, 25, 0.95) 100%
+            );
+            z-index: 2;
+        }
+
+        .content {
+            position: absolute;
+            top: 50%;
+            right: 10%;
+            transform: translateY(-50%);
+            z-index: 3;
+            text-align: right;
+            perspective: 1000px;
+        }
+
+        h1 {
+            color: white;
+            font-size: 5.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            animation: titleFloat 6s ease-in-out infinite;
+            letter-spacing: -2px;
+            line-height: 1.1;
+        }
+
+        .description {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 1.4rem;
+            line-height: 1.6;
+            margin-bottom: 3rem;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            animation: descFloat 6s ease-in-out infinite;
+            max-width: 600px;
+            margin-left: auto;
+        }
+
+        .admin-portal {
+            position: relative;
+            display: inline-block;
+        }
+
+        .admin-button {
+            display: inline-block;
+            padding: 1.3rem 3.5rem;
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: white;
+            /* Updated gradient using the new color */
+            background: linear-gradient(135deg,rgb(32, 67, 86) 0%,rgb(25, 58, 72) 100%);
+            border-radius: 12px;
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            /* Updated shadow color to match new theme */
+            box-shadow: 0 10px 30px rgba(35, 74, 94, 0.3),
+                       inset 0 2px 1px rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .admin-button:hover {
+            transform: translateY(-2px);
+            /* Updated hover shadow */
+            box-shadow: 0 15px 40px rgba(38, 75, 93, 0.4),
+                       inset 0 2px 1px rgba(255, 255, 255, 0.4);
+            /* Slightly lighter gradient on hover */
+            background: linear-gradient(135deg, #2d5670 0%, #264b5d 100%);
+        }
+        
+        /* Update the glow effect color */
+        .glow {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(
+                circle at center,
+                rgba(38, 75, 93, 0.3) 0%,
+                transparent 70%
+            );
+            filter: blur(20px);
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .admin-portal:hover .glow {
+            opacity: 1;
+        }
+
+        @keyframes titleFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes descFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .image-enhancer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(
+                circle at 30% 50%,
+                rgba(255, 255, 255, 0.1) 0%,
+                transparent 60%
+            );
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                right: 5%;
+                width: 90%;
+            }
+
+            h1 {
+                font-size: 3.5rem;
+            }
+
+            .description {
+                font-size: 1.2rem;
+            }
+
+            .admin-button {
+                padding: 1.2rem 2.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="fullscreen-container">
+        <img src="{% static 'high_quality_image.png' %}" alt="IOE Campus" class="background-image">
+        <div class="gradient-overlay"></div>
+        <div class="image-enhancer"></div>
+        <div class="content">
+            <h1>MSC Workflow</h1>
+            <p class="description">
+                Welcome to the MSc Workflow and Document Management System
+            </p>
+            <div class="admin-portal">
+                <div class="glow"></div>
+                <a href="/admin" class="admin-button">Access Admin Portal</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

@@ -1,0 +1,57 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('MSC Thesis Document Generation') }}{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    #header {
+        /* Ensure header is properly styled */
+        height: auto;
+        padding: 15px 40px;
+        background:rgb(10, 74, 106);
+    }
+    
+    /* Hide any duplicate admin interfaces */
+    .default-admin-interface {
+        display: none !important;
+    }
+    
+    /* Ensure logo is properly sized */
+    #header img {
+        max-height: 60px;
+        margin-right: 15px;
+    }
+</style>
+{% endblock %}
+
+{% block header %}
+<div id="header">
+    <a href="/"> 
+        <img src="{% static 'admin/img/campuslogo.jpg' %}" alt="Campus Logo">
+    </a>
+    
+    <div id="branding">
+        <h1 id="site-name">
+            <a href="{% url 'admin:index' %}">{{ site_header|default:_('MSc Teachers & Experts Database') }}</a>
+            <a href="{% url 'thesis:index' %}"><strong style="color:rgb(45, 45, 45)">|| </strong>{{ site_header1|default:_('MSc Thesis Document Generation') }}</a>
+        </h1>
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+<div style="
+    text-align: center;
+    color: white;
+    background:rgb(8, 68, 98);
+    padding: 10px;
+    bottom: 0;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+">
+    System by 072 BCT, 073 BCT,077 BCT and 078 BCT| <a href="{% url 'aboutsystem' %}">About / Contact Developers</a>
+</div>
+{% endblock %}

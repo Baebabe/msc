@@ -1,0 +1,315 @@
+{% extends 'thesis/base.html' %}
+{% load static %}
+
+{% block body %}
+<div class="dashboard-container">
+    <form method="POST">
+        {% csrf_token %}
+        
+        <!-- Header Section -->
+        <!-- Header Section -->
+<div class="dashboard-header">
+    <h2>Student List</h2>
+    <div class="current-info">
+        <div class="info-item">
+            <i class="fas fa-user"></i>
+            <span>{{ request.user.username }}</span>  <!-- Changed this line to show logged-in user -->
+        </div>
+        <div class="info-item">
+            <i class="fas fa-clock"></i>
+            <span>{{ current_datetime|date:"Y-m-d H:i:s" }}</span>
+        </div>
+    </div>
+</div>
+
+        <!-- Main Content -->
+        <div class="content-wrapper">
+            <div class="table-container">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th class="super-narrow-col">
+                                <div class="checkbox-wrapper">
+                                    <input type="checkbox" id="selectAll" class="custom-checkbox">
+                                    <label for="selectAll"></label>
+                                </div>
+                            </th>
+                            <th class="narrow-col">S.N.</th>
+                            <th class="medium-col">Name</th>
+                            <th class="narrow-col">Roll No.</th>
+                            <th class="narrow-col">Exam Roll</th>
+                            <th class="large-col">Thesis Title</th>
+                            <th class="medium-col">Supervisor</th>
+                            <th class="medium-col">Examiner</th>
+                            <th class="marks-col">Mid Term</th>
+                            <th class="marks-col">Final</th>
+                            <th class="marks-col">Internal</th>
+                            <th class="marks-col">Final</th>
+                            <th class="marks-col">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for form in formset %}
+                        <tr>
+                            <td>
+                                <div class="checkbox-wrapper">
+                                    <input type="checkbox" name="selected_students" value="{{ form.instance.id }}" 
+                                           class="custom-checkbox" id="student-{{ forloop.counter }}">
+                                    <label for="student-{{ forloop.counter }}"></label>
+                                </div>
+                            </td>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ form.name }}</td>
+                            <td>{{ form.rollNumber }}</td>
+                            <td>{{ form.examRollNumber }}</td>
+                            <td>{{ form.thesisTitle }}</td>
+                            <td>{{ form.supervisor }}</td>
+                            <td>{{ form.examiner }}</td>
+                            <td>{{ form.midterm }}</td>
+                            <td>{{ form.final }}</td>
+                            <td>{{ form.internalMarks }}</td>
+                            <td>{{ form.finalMarks }}</td>
+                            <td>{{ form.totalMarks }}</td>
+                            <!-- Hidden fields -->
+                            {{ form.id }}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            {{ formset.management_form }}
+            
+            <div class="action-buttons">
+                <button type="submit" name="submit" class="btn-primary">
+                    <i class="fas fa-save"></i>
+                    Submit Changes
+                </button>
+                <button type="submit" name="delete" class="btn-delete">
+                    <i class="fas fa-trash-alt"></i>
+                    Delete Selected
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<style>
+    .dashboard-container {
+        padding: 2rem;
+        background: #f8f9fd;
+        min-height: 100vh;
+    }
+
+    .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        padding: 1rem 2rem;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 2px 15px rgba(38, 75, 93, 0.08);
+    }
+
+    .dashboard-header h2 {
+        color: #264b5d;
+        font-weight: 600;
+        font-size: 1.8rem;
+        margin: 0;
+    }
+
+    .content-wrapper {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 2px 15px rgba(38, 75, 93, 0.08);
+        padding: 2rem;
+    }
+
+    .table-container {
+        overflow-x: auto;
+        margin-bottom: 2rem;
+    }
+
+    /* Table Styles */
+    .custom-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        background: white;
+    }
+
+    .custom-table th {
+        background: #264b5d;
+        color: white;
+        padding: 0.75rem;
+        font-weight: 500;
+        text-align: left;
+        font-size: 0.9rem;
+        white-space: nowrap;
+    }
+
+    .custom-table td {
+        padding: 0.75rem;
+        border-bottom: 1px solid #eef0f7;
+        color: #5a6777;
+        font-size: 0.9rem;
+    }
+
+    /* Column Widths */
+    .super-narrow-col { width: 40px; }
+    .narrow-col { width: 80px; }
+    .marks-col { width: 80px; }
+    .medium-col { width: 150px; }
+    .large-col { width: 200px; }
+
+    /* Form Inputs */
+    input[type="text"], 
+    input[type="number"] {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        color: #5a6777;
+    }
+
+    /* Checkbox Styles */
+    .checkbox-wrapper {
+        display: flex;
+        justify-content: center;
+    }
+
+    .custom-checkbox {
+        width: 18px;
+        height: 18px;
+        appearance: none;
+        border: 2px solid #264b5d;
+        border-radius: 4px;
+        cursor: pointer;
+        position: relative;
+        transition: all 0.3s ease;
+    }
+
+    .custom-checkbox:checked {
+        background: #264b5d;
+        border-color: #264b5d;
+    }
+
+    .custom-checkbox:checked::after {
+        content: '✓';
+        color: white;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 12px;
+    }
+
+    /* Button Styles */
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        padding-top: 1rem;
+    }
+
+    .btn-primary, .btn-delete {
+        padding: 0.8rem 2rem;
+        border: none;
+        border-radius: 8px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: white;
+    }
+
+    .btn-primary {
+        background: #264b5d;
+    }
+
+    .btn-delete {
+        background:rgb(29, 64, 85);
+    }
+
+    .btn-primary:hover, .btn-delete:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(38, 75, 93, 0.15);
+    }
+</style>
+
+<script>
+$(document).ready(function() {
+    // Select All functionality
+    $('#selectAll').change(function() {
+        $('.custom-checkbox').prop('checked', $(this).prop('checked'));
+    });
+});
+</script>
+
+{% endblock %}
+{% comment %} 
+{% extends 'thesis/base.html' %}
+
+{% load static %}
+
+{% block body %}
+
+<form class="form-horizontal" method="POST">
+    {% csrf_token %}
+    <fieldset>
+        <!-- Form Name -->
+        <h2 style="text-align: center; color: #1b6d85"><strong>Student List</strong></h2>
+        <div class="col-lg-11">
+            <table style="margin-left: 5%" class="table table-bordered table-hover table-sm">
+                <thead>
+                    <tr>
+                        <th style="width: 3%" scope="col" id='column-header-1'>S.N.</th>
+                        <th style="width: 3%" scope="col">Select</th>
+                        <th style="width: 12%" scope="col">Name</th>
+                        <th style="width: 11%" scope="col">Roll Number</th>
+                        <th scope="col" style="width: 8%">Exam Roll</th>
+                        <th style="width: 20%" scope="col">Thesis Title</th>
+                        <th scope="col">Supervisor</th>
+                        <th scope="col">Examiner</th>
+                        <th style="width: 3%" scope="col">Mid Term</th>
+                        <th style="width: 3%" scope="col">Final</th>
+                        <th scope="col">Internal Marks</th>
+                        <th scope="col">Final Marks</th>
+                        <th scope="col">Total Marks</th>
+                        <th style="width: 0%" scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for f in formset %}
+                        <tr>
+                            <th scope="row"> {{ forloop.counter }} </th>
+                            <td>
+                                <input type="checkbox" name="selected_students" value="{{ f.instance.id }}">
+                            </td>
+                            <td>{{ f.name }}</td>
+                            <td>{{ f.rollNumber }}</td>
+                            <td>{{ f.examRollNumber }}</td>
+                            <td>{{ f.thesisTitle }}</td>
+                            <td>{{ f.supervisor }}</td>
+                            <td>{{ f.examiner }}</td>
+                            <td>{{ f.midterm }}</td>
+                            <td>{{ f.final }}</td>
+                            <td>{{ f.internalMarks }}</td>
+                            <td>{{ f.finalMarks }}</td>
+                            <td>{{ f.totalMarks }}</td>
+                            <td>{{ f.id }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {{ formset.management_form }}
+        <button id="submit" type="submit" name="submit" style="margin-left:45%;" class="btn btn-primary btn-lg">Submit</button>
+        <button id="delete" type="submit" name="delete" style="margin-left:5%;" class="btn btn-danger btn-lg">Delete Selected Students</button>
+    </fieldset>
+</form>
+
+{% endblock %} {% endcomment %}

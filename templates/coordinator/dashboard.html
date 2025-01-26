@@ -1,0 +1,59 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{% static 'admin/css/dashboard.css' %}">
+{% endblock %}
+
+{% block bodyclass %}{{ block.super }} dashboard{% endblock %}
+
+{% block content %}
+<div id="content-main">
+    <h1>Welcome, {{ coordinator.full_name }}</h1>
+
+    <div class="module">
+        <h2>My Programmes</h2>
+        {% for programme in programmes %}
+        <div class="programme-card">
+            <h3>{{ programme.name }}</h3>
+            <div class="programme-stats">
+                <p>Total Batches: {{ programme.batch_set.count }}</p>
+                <p>Current Teachers: {{ programme.assignsubjectteacher_set.count }}</p>
+            </div>
+            <div class="programme-actions">
+                <a href="{% url 'college:manage_programme_teachers' programme.id %}" class="button">Manage Teachers</a>
+                <a href="{% url 'college:view_programme_students' programme.id %}" class="button">View Students</a>
+            </div>
+        </div>
+        {% empty %}
+        <p>No programmes assigned yet.</p>
+        {% endfor %}
+    </div>
+
+    <div class="module">
+        <h2>Recent Subject Assignments</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Subject</th>
+                    <th>Teacher</th>
+                    <th>Batch</th>
+                    <th>Semester</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for assignment in subject_teachers|slice:":5" %}
+                <tr>
+                    <td>{{ assignment.subject.name }}</td>
+                    <td>{{ assignment.subject_teacher.full_name }}</td>
+                    <td>{{ assignment.batch }}</td>
+                    <td>{{ assignment.semester }}</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="4">No subject assignments yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block bodyclass %}{{ block.super }} manage-programme{% endblock %}
+
+{% block content %}
+<div id="content-main">
+    <h1>{{ programme.name }} - Teacher Management</h1>
+
+    <div class="module">
+        <h2>Current Subject Teachers</h2>
+        {% regroup subject_teachers by semester as semester_list %}
+        
+        {% for semester in semester_list %}
+        <div class="semester-section">
+            <h3>{{ semester.grouper }} Semester</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Subject</th>
+                        <th>Teacher</th>
+                        <th>Experience</th>
+                        <th>Contact</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for assignment in semester.list %}
+                    <tr>
+                        <td>{{ assignment.subject.name }}</td>
+                        <td>{{ assignment.subject_teacher.full_name }}</td>
+                        <td>{{ assignment.subject_teacher_teaching_experience_years }} years</td>
+                        <td>
+                            {{ assignment.subject_teacher.email }}<br>
+                            {{ assignment.subject_teacher.mobile_phone }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="module">
+        <h2>Quick Actions</h2>
+        <div class="actions">
+            <a href="{% url 'college:coordinator_export_form' %}" class="button">Export Teacher Data</a>
+            <a href="{% url 'college:coordinator_dashboard' %}" class="button">Back to Dashboard</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
