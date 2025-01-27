@@ -77,6 +77,11 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+CSP_DEFAULT_SRC = ("'self'", "https:", "'unsafe-inline'")
+CSP_STYLE_SRC = ("'self'", "https:", "'unsafe-inline'")
+CSP_SCRIPT_SRC = ("'self'", "https:", "'unsafe-inline'")
+CSP_IMG_SRC = ("'self'", "https:", "data:", "blob:")
+
 ROOT_URLCONF = 'mscteachers.urls'
 
 TEMPLATES = [
