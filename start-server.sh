@@ -5,11 +5,8 @@ echo "Starting server..."
 # Add debugging information
 set -x
 
-# Collect static files
-python manage.py collectstatic --noinput
-
-# Start the Django server
-python manage.py runserver 0.0.0.0:7188
+# Start the Django server or whatever command you need
+python ./manage.py runserver 0.0.0.0:7188
 
 # Check if the server started successfully
 if [ $? -ne 0 ]; then
