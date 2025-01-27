@@ -1,9 +1,23 @@
-version: "3.8" # Specify the version of Docker Compose
-
+# Option 1 - Modern version (Recommended)
 services:
   app:
     build:
-      context: . # Path to the directory containing the Dockerfile
-      dockerfile: Dockerfile # Name of the Dockerfile (optional if named Dockerfile)
+      context: .
+      dockerfile: Dockerfile
     ports:
-      - "7188:7188" # Map port 80 in the container to port 8080 on the host
+      - "7188:7188"
+    # Add healthcheck for better container monitoring
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7188/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    # Restart policy for better reliability
+    restart: unless-stopped
+    # Add reasonable resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
