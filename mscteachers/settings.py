@@ -21,22 +21,18 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'n=7ud-_go7@qv=-dmpdgp@84c)%b-f6vty1y5%w5ngi3_^aw_s'
 
-
+CSRF_TRUSTED_ORIGINS = [
+    'https://mscwp.onrender.com',
+]
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
 # Security settings
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SECURE_SSL_REDIRECT = False
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
-SECURE_BROWSER_XSS_FILTER = True
-SECURE_CONTENT_TYPE_NOSNIFF = True
-SECURE_HSTS_SECONDS = 31536000  # 1 year
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
-
 ALLOWED_HOSTS = [
     'mscpw.onrender.com',
     'localhost',
@@ -44,10 +40,6 @@ ALLOWED_HOSTS = [
     '[::1]',
     '0.0.0.0',
     "*",
-]
-
-CSRF_TRUSTED_ORIGINS = [
-    'https://mscwp.onrender.com',
 ]
 # Application definition
 
@@ -76,11 +68,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
-CSP_DEFAULT_SRC = ("'self'", "https:", "'unsafe-inline'")
-CSP_STYLE_SRC = ("'self'", "https:", "'unsafe-inline'")
-CSP_SCRIPT_SRC = ("'self'", "https:", "'unsafe-inline'")
-CSP_IMG_SRC = ("'self'", "https:", "data:", "blob:")
 
 ROOT_URLCONF = 'mscteachers.urls'
 
@@ -155,8 +142,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 # INTERNAL_IPS = ('127.0.0.1',)
 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-
+STATIC_ROOT = os.path.join(PROJECT_ROOT, '../mscteachers/static')
