@@ -14,4 +14,4 @@ COPY . .
 RUN python manage.py collectstatic --noinput
 
 # Command to run the application
-CMD gunicorn mscteachers.wsgi.application --bind 0.0.0.0:7188
+CMD gunicorn mscteachers.wsgi:application --bind 0.0.0.0:7188
