@@ -156,4 +156,5 @@ STATICFILES_DIRS = [
 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# settings.py
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'  
