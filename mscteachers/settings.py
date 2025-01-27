@@ -20,18 +20,19 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'n=7ud-_go7@qv=-dmpdgp@84c)%b-f6vty1y5%w5ngi3_^aw_s'
+
 CSRF_TRUSTED_ORIGINS = ['https://mscpw.onrender.com']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
+    'mscpw.onrender.com',
     'localhost',
     '127.0.0.1',
     '[::1]',
     '0.0.0.0',
     "*",
-    "mscpw.onrender.com",
 ]
 # Application definition
 
@@ -136,7 +137,6 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 # INTERNAL_IPS = ('127.0.0.1',)
-
 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC_ROOT = os.path.join(PROJECT_ROOT, '../mscteachers/static')
