@@ -1,30 +1,17 @@
-FROM python:3.12.4-slim
+FROM python:3.12
 
-# Set environment variables
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
-
-RUN apt-get update && apt-get install -y curl wget
-# Set the working directory in the container
+# Set working directory
 WORKDIR /app
 
-# Copy the requirements file to the container
-COPY requirements.txt /app/
-RUN pip install --no-cache-dir -r requirements.txt
+# Copy requirements and install dependencies
+COPY requirements.txt .
+RUN pip install -r requirements.txt
 
-# Copy the entire current directory to /app/
-COPY . /app/
+# Copy project files
+COPY . .
 
-COPY start-server.sh /app/
+# Collect static files
+RUN python manage.py collectstatic --noinput
 
-# Ensure the start-server script is executable
-RUN chmod +x /app/start-server.sh
-
-# Verify the contents of the /app directory
-RUN ls -l /app/
-
-# Expose port 7188 for the application
-EXPOSE 7188
-
-# Run the application
-ENTRYPOINT ["sh", "-c", "ls -l /app && /app/start-server.sh"]
+# Command to run the application
+CMD gunicorn mscteachers.wsgi.application --bind 0.0.0.0:7188

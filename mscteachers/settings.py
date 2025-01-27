@@ -66,7 +66,7 @@ INSTALLED_APPS = [
 ADMIN_TOOLS_INDEX_DASHBOARD = None  
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    # 'whitenoise.middleware.WhiteNoiseMiddleware',  # Move this right after security middleware
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Move this right after security middleware
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -147,13 +147,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # This is important for collection
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')
+    os.path.join(BASE_DIR, 'mscteachers/static')
 ]
 
 # INTERNAL_IPS = ('127.0.0.1',)
 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
-# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
