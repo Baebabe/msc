@@ -40,6 +40,7 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('admin/', admin_site.urls), 
     path('accounts/', include('django.contrib.auth.urls')), # Use your custom admin site
+    
     re_path(r'^.*export.*$', views.exportform),
     re_path(r'^.*dumpteachers.*$', views.exportteachers, name='dumpteachers'),
     re_path(r'^.*dumpexperts.*$', views.exportexperts, name='dumpexperts'),

@@ -48,7 +48,6 @@ ALLOWED_HOSTS = [
     "*",
 ]
 
-
 INSTALLED_APPS = [
     'mscteachers',
     'import_export',

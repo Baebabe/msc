@@ -106,7 +106,7 @@ def exportform(request):
             if form.cleaned_data['year'] is not None:
                 queryList = queryList.filter(year=form.cleaned_data['year'])
 
-            if form.cleaned_data['part'] is not "":
+            if form.cleaned_data['part'] != "":
                 if form.cleaned_data['part'] == 'Odd':
 
                     queryList = queryList.filter(semester__in=['First', 'Third'])
@@ -119,7 +119,7 @@ def exportform(request):
             if form.cleaned_data['programme'] is not None:
                 queryList = queryList.filter(
                     batch__programme=form.cleaned_data['programme'])
-            if form.cleaned_data['semester'] is not "":
+            if form.cleaned_data['semester'] != "":
                 queryList = queryList.filter(semester=form.cleaned_data['semester'])
 
             return generate_xlsx(request, queryList)
@@ -253,7 +253,7 @@ def cloneyear(request):
 
                     queryList = queryList.filter(year__name=fromyear)
 
-                    if form.cleaned_data['Semester_type'] is not "":
+                    if form.cleaned_data['Semester_type'] != "":
                         if form.cleaned_data['Semester_type'] == 'Odd':
                             queryList = queryList.filter(semester__in=['First', 'Third'])
                         elif form.cleaned_data['Semester_type'] == 'Even':
