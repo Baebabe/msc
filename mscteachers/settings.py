@@ -23,6 +23,7 @@ SECRET_KEY = 'n=7ud-_go7@qv=-dmpdgp@84c)%b-f6vty1y5%w5ngi3_^aw_s'
 
 CSRF_TRUSTED_ORIGINS = [
     'https://mscwp.onrender.com',
+    'https://mscw.bct.itclub.pp.ua',
 ]
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -41,6 +42,7 @@ SECURE_HSTS_PRELOAD = True
 
 ALLOWED_HOSTS = [
     'mscpw.onrender.com',
+    'mscw.bct.itclub.pp.ua',
     'localhost',
     '127.0.0.1',
     '[::1]',
